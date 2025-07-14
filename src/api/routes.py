@@ -47,7 +47,7 @@ def handle_signup():
     db.session.commit()
 
     return jsonify({"msg": "Usuario creado exitosamente"}), 201
-    
+
 @api.route("/login", methods=["POST"])
 def login():
         data = request.get_json()
@@ -59,4 +59,12 @@ def login():
 
 
 @api.route("/private", methods=['GET'])
+@jwt_required()
 def private():
+    current_user_id = get_jwt_identity()
+    user = db.session.execute(select(User).where(User.id == current_user_id)).scalar_one_or_none()
+
+    if not user:
+        return jsonify({"msg": "Usuario no encontrado"}), 404
+
+    return jsonify({"message": "Acceso concedido", "user": {"id": user.id, "email": user.email}}), 200
