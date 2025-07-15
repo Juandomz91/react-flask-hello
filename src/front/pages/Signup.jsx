@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -17,7 +20,8 @@ const Signup = () => {
       });
       const data = await response.json();
       if (response.ok) {
-        setMessage(data.msg);
+        setMessage(data.msg || 'Registro exitoso!');
+        navigate('/login'); 
       } else {
         setMessage(data.msg || 'Error al registrarse');
       }

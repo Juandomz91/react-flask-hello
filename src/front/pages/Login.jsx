@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -11,7 +14,7 @@ const Login = () => {
       const response = await fetch('https://sturdy-disco-wr5grwv4vqww3g4r5-3001.app.github.dev/api/login', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+         'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
       });
@@ -19,6 +22,7 @@ const Login = () => {
       if (response.ok) {
         setMessage('Inicio de sesión exitoso');
         localStorage.setItem('access_token', data.access_token);
+        navigate('/private'); 
       } else {
         setMessage(data.msg || 'Error al iniciar sesión');
       }
@@ -26,6 +30,7 @@ const Login = () => {
       setMessage('Error al conectar con el servidor');
     }
   };
+
 
   return (
     <div>
